@@ -12,46 +12,44 @@ const User = mongoose.model('User', userSchema);
 
 const Admin = User.discriminator('admin', new mongoose.Schema({
     permissions: {
-        values: [{type: String, required: true, enum: ['create', 'read', 'update', 'delete']}],
-        default: ['create', 'read', 'update']
+        type: [{ type: String, enum: ['create', 'read', 'update', 'delete'], required: true }],
+        default: ['create', 'read', 'update', 'delete']
     }
-}));
-const Coach = User.discriminator('coach', new mongoose.Schema({
-    speciality: {type: String, required: true, default: 'General'},
-    experience: {
-        clubs: [{type: mongoose.Schema.Types.ObjectId, ref: 'Club', startedAt: Date, endedAt: Date, default: null}],
-        years: {type: Number, default: 0},
-    }
-}));
-const Player = User.discriminator('player', new mongoose.Schema({
-    position: {type: String, required: true, default: 'General'},
-    clubs: [{type: mongoose.Schema.Types.ObjectId, ref: 'Club', startedAt: Date, endedAt: Date, jersyNumber: Number, default: null}],
-    stats: [
-        {
-            season: {type: String, required: true, default: null},
-            totalPoints: {
-                fieldPoints: {
-                    attempts: {type: Number, default: 0},
-                    made: {type: Number, default: 0},
-                },
-                threePoints: {
-                    attempts: {type: Number, default: 0},
-                    made: {type: Number, default: 0}
-                },
-                freeThrows: {
-                    attempts: {type: Number, default: 0},
-                    made: {type: Number, default: 0}
-                }
-            },
-            rebounds: {
-                offensive: {type: Number, default: 0},
-                deffensive: {type: Number, default: 0},
-            },
-            assists: {type: Number, default: 0},
-            steals: {type: Number, default: 0},
-            blocks: {type: Number, default: 0},
-        }
-    ]
 }));
 
-export {User, Admin, Coach, Player};
+const Player = User.discriminator('player', new mongoose.Schema({
+    code : {type: String, required: true, unique: true, match: [/^[A-Z]{2}-\d{5}$/, 'Invalid player code format. Must be in the format two uppercase letters followed by a space and a five-digit number.']},
+    position: {type: String, required: true, default: 'General'},
+    clubs: {
+        type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Club', startedAt: Date, endedAt: Date, jersyNumber: Number}],
+        default: []
+    },
+    stats: {
+        totalGamesPlayed: { type: Number, default: 0 },
+        totalPoints: {
+            fieldPoints: {
+                attempts: { type: Number, default: 0 },
+                made: { type: Number, default: 0 }
+            },
+            threePoints: {
+                attempts: { type: Number, default: 0 },
+                made: { type: Number, default: 0 }
+            },
+            freeThrows: {
+                attempts: { type: Number, default: 0 },
+                made: { type: Number, default: 0 }
+            }
+        },
+        rebounds: {
+            offensive: { type: Number, default: 0 },
+            defensive: { type: Number, default: 0 }
+        },
+        assists: { type: Number, default: 0 },
+        steals: { type: Number, default: 0 },
+        blocks: { type: Number, default: 0 }
+    },
+    games: {type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Game' }], default: []}
+}
+));
+
+export {User, Admin, Player};

@@ -3,3 +3,5 @@ const moveToClub =  async(req, res) => {
 
     const player = awaitPlayer.findById(player_id)
 }
+
+export {moveToClub};

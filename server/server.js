@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import logger from "./utils/logger.js";
 import mongoose from "mongoose";
 import cors from "cors";
-import authRouter from "./routes/auth.routes.js";
+import authRouter from "./routes/auth.router.js";
 import clubRouter from "./routes/club.router.js";
 
 dotenv.config();
@@ -11,10 +11,11 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.use('/api/auth',authRouter);
-app.use('/api/club',clubRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/club', clubRouter);
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
