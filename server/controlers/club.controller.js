@@ -1,3 +1,5 @@
+import Club from "../db/models/club.model.js"
+
 const createClub = (req, res) => {
     const {name, location, owner} = req.body
 

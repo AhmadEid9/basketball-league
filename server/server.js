@@ -5,11 +5,13 @@ import mongoose from "mongoose";
 import cors from "cors";
 import authRouter from "./routes/auth.router.js";
 import clubRouter from "./routes/club.router.js";
+import morgan from "morgan";
 
 dotenv.config();
 
 const app = express();
 
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());

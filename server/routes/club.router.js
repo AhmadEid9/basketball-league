@@ -8,8 +8,8 @@ const router = Router();
 router.post('/club', authMiddleware ,authorizeRoles(['admin, superuser']), createClub)
 
 router.get('/clubs', authMiddleware, getClubs)
-router.get('/club/:id', authMiddleware, getClub)
+router.get('/:id', authMiddleware, getClub)
 
-router.delete('/club/:id', authMiddleware, authorizeRoles(['admin, superuser']), createClub)
+router.delete('/:id', authMiddleware, authorizeRoles(['admin, superuser']), createClub)
 
 export default router;

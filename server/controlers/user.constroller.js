@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import { User } from '../db/models/user.model';
 
 const changePassword = async (req, res) => {
     const { email, oldPassword, newPassword, confirmPassword } = req.body;
@@ -26,6 +27,11 @@ const changePassword = async (req, res) => {
             return res.status(404).json('User not found');
         }
 
+        const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+        if (!isPasswordValid) {
+            return res.status(400).json('Wrong password');
+        }
+
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         user.password = hashedPassword;
         await user.save();
@@ -34,7 +40,6 @@ const changePassword = async (req, res) => {
     } catch(error){
         return res.status(400).json({ message: 'Error changing password' });
     }
-
-
-
 }
+
+export {changePassword}

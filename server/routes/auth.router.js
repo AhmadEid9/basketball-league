@@ -6,9 +6,9 @@ import authorizeRoles from "../middleware/authorizeRoles.js";
 const router = Router();
 
 
-router.post('/signup/', signup);
+router.post('/signup', signup);
 
-router.post('/login/', login);
+router.post('/login', login);
 
 router.delete('/user/:id', authMiddleware, authorizeRoles('admin', 'superuser'), deleteUser);
 router.delete('/self', authMiddleware, deleteSelf);

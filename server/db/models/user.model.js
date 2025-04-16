@@ -17,6 +17,21 @@ const Admin = User.discriminator('admin', new mongoose.Schema({
     }
 }));
 
+const SuperUser = User.discriminator('superuser', new mongoose.Schema({
+    club: {type: mongoose.Schema.Types.ObjectId, ref: 'Club', required: true}
+
+}));
+
+const Coach = User.discriminator('coach', new mongoose.Schema({
+    clubs: {type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Club'}], default: []},
+    stats: {
+        totalGamesPlayed: {
+            gamesWon: [{type: mongoose.Schema.Types.ObjectId, ref: 'Game', default: []}],
+            gamesLost: [{type: mongoose.Schema.Types.ObjectId, ref: 'Game', default: []}]
+        },
+    }
+}))
+
 const Player = User.discriminator('player', new mongoose.Schema({
     code : {type: String, required: true, unique: true, match: [/^[A-Z]{2}-\d{5}$/, 'Invalid player code format. Must be in the format two uppercase letters followed by a space and a five-digit number.']},
     position: {type: String, required: true, default: 'General'},
@@ -52,4 +67,4 @@ const Player = User.discriminator('player', new mongoose.Schema({
 }
 ));
 
-export {User, Admin, Player};
+export {User, Admin, SuperUser, Coach, Player};
